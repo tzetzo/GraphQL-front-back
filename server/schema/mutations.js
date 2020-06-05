@@ -35,6 +35,18 @@ const mutation = new GraphQLObjectType({
         req.logout();
         return user;
       }
+    },
+    login: {
+      // login user
+      type: UserType, //returned type from resolve() --> not necessarily the same as what we work on
+      args: {
+        email: { type: new GraphQLNonNull(GraphQLString) }, //required arg
+        password: { type: new GraphQLNonNull(GraphQLString) } //required arg
+      },
+      resolve(parentValue, { email, password }, req) {
+        // req object coming from express
+        return AuthService.login({ email, password, req });
+      }
     }
   }
 });
