@@ -2,10 +2,10 @@ import React, { Component } from "react";
 import {hashHistory} from 'react-router';
 import AuthForm from "./AuthForm";
 import { graphql } from "react-apollo"; // the glue b/n React & GraphQL wworld
-import mutation from "../mutations/Login";
+import mutation from "../mutations/Signup";
 import query from "../queries/CurrentUser";
 
-class LoginForm extends Component {
+class SignupForm extends Component {
   constructor(props) {
     super(props);
     this.state = { errors: [] };
@@ -19,9 +19,9 @@ class LoginForm extends Component {
           email,
           password
         },
-        refetchQueries: [{ query }] //telling GraphQL to execute the listed queries after the mutation; runs at the same time as the next then()!
+        refetchQueries: [{ query }] //telling GraphQL to execute the listed queries after the mutation
       })
-      //.then(res => hashHistory.push("/")) //runs at the same time as the refetchQueries!
+      //.then(res => hashHistory.push("/"))
       .catch(res => {
         // debugger;
         const errors = res.graphQLErrors.map(e => e.message);
@@ -32,11 +32,11 @@ class LoginForm extends Component {
   render() {
     return (
       <div>
-        <h3>Login</h3>
+        <h3>Sign Up</h3>
         <AuthForm errors={this.state.errors} onSubmit={this.onSubmit.bind(this)} />
       </div>
     );
   }
 }
 
-export default graphql(mutation)(LoginForm);
+export default graphql(mutation)(SignupForm);
