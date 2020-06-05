@@ -4,6 +4,7 @@ import ApolloClient, { createNetworkInterface } from "apollo-client"; //makes th
 import { ApolloProvider } from "react-apollo";
 import { Router, hashHistory, Route } from "react-router";
 import App from "./components/App";
+import LoginForm from "./components/LoginForm";
 
 //create our custom network interface
 const networkInterface = createNetworkInterface({
@@ -23,9 +24,8 @@ const Root = () => {
     <ApolloProvider client={client}>
       <Router history={hashHistory}>
         <Route path="/" component={App}>
-          {/*
-          <Route path="/signup" component={SignUp} />
-          <Route path="/signin" component={SignIn} />*/}
+          {/*<Route path="/signup" component={SignUp} />*/}
+          <Route path="/login" component={LoginForm} />
         </Route>
       </Router>
     </ApolloProvider>
