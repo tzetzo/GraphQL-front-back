@@ -25,6 +25,16 @@ const mutation = new GraphQLObjectType({
         // req object coming from express
         return AuthService.signup({ email, password, req });
       }
+    },
+    logout: {
+      // logout user
+      type: UserType, //returned type from resolve() --> not necessarily the same as what we work on
+      resolve(parentValue, args, req) {
+        // req object coming from express
+        const {user} = req;
+        req.logout();
+        return user;
+      }
     }
   }
 });
