@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {hashHistory} from 'react-router';
+import { hashHistory } from "react-router";
 import AuthForm from "./AuthForm";
 import { graphql } from "react-apollo"; // the glue b/n React & GraphQL wworld
 import mutation from "../mutations/Signup";
@@ -11,6 +11,13 @@ class SignupForm extends Component {
     this.state = { errors: [] };
   }
 
+  componentDidUpdate(prevProps){
+    //redirect user when query is done - i.e. current user is fetched
+    if(!prevProps.data.user && this.props.data.user){
+      hashHistory.push("/dashboard")
+    }
+  }
+
   onSubmit({ email, password }) {
     // invoke the mutation passing parameter
     this.props
@@ -19,13 +26,13 @@ class SignupForm extends Component {
           email,
           password
         },
-        refetchQueries: [{ query }] //telling GraphQL to execute the listed queries after the mutation
+        refetchQueries: [{ query }] //telling GraphQL to execute the listed queries after the mutation; runs at the same time as the next then()!
       })
-      //.then(res => hashHistory.push("/"))
+      //.then(res => hashHistory.push("/")); //runs at the same time as the refetchQueries!
       .catch(res => {
         // debugger;
         const errors = res.graphQLErrors.map(e => e.message);
-        this.setState({errors})
+        this.setState({ errors });
       });
   }
 
@@ -33,7 +40,10 @@ class SignupForm extends Component {
     return (
       <div>
         <h3>Sign Up</h3>
-        <AuthForm errors={this.state.errors} onSubmit={this.onSubmit.bind(this)} />
+        <AuthForm
+          errors={this.state.errors}
+          onSubmit={this.onSubmit.bind(this)}
+        />
       </div>
     );
   }

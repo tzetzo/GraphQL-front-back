@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {hashHistory} from 'react-router';
+import { hashHistory } from "react-router";
 import AuthForm from "./AuthForm";
 import { graphql } from "react-apollo"; // the glue b/n React & GraphQL wworld
 import mutation from "../mutations/Login";
@@ -9,6 +9,13 @@ class LoginForm extends Component {
   constructor(props) {
     super(props);
     this.state = { errors: [] };
+  }
+
+  componentDidUpdate(prevProps){
+    //redirect user when query is done - i.e. current user is fetched
+    if(!prevProps.data.user && this.props.data.user){
+      hashHistory.push("/dashboard")
+    }
   }
 
   onSubmit({ email, password }) {
@@ -25,7 +32,7 @@ class LoginForm extends Component {
       .catch(res => {
         // debugger;
         const errors = res.graphQLErrors.map(e => e.message);
-        this.setState({errors})
+        this.setState({ errors });
       });
   }
 
@@ -33,10 +40,13 @@ class LoginForm extends Component {
     return (
       <div>
         <h3>Login</h3>
-        <AuthForm errors={this.state.errors} onSubmit={this.onSubmit.bind(this)} />
+        <AuthForm
+          errors={this.state.errors}
+          onSubmit={this.onSubmit.bind(this)}
+        />
       </div>
     );
   }
 }
 
-export default graphql(mutation)(LoginForm);
+export default graphql(query)(graphql(mutation)(LoginForm));
