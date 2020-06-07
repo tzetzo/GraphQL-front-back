@@ -11,7 +11,7 @@ class Header extends Component {
       .mutate({
         refetchQueries: [{ query }] //telling GraphQL to execute the listed queries after the mutation
       })
-      .then(() => hashHistory.push("/"));
+      // .then(() => hashHistory.push("/"));
   }
 
   renderButtons() {
